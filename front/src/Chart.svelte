@@ -2,26 +2,33 @@
 
 <script lang="ts">
   import { onMount } from 'svelte'
-  import EventEmitter from 'events'
 
-  import createDispatch from './utils/dispatch'
   import initChart from './utils/initChart'
+  import type { Themes } from './utils/initChart'
 
-  const emitter = new EventEmitter();
-  const dispatch = createDispatch();
+  export let ws = import.meta.env.FRONT_WS_SERVER || window.location.host
+  export let title = 'Неизвестная'
+  export let metric = 'random'
+  export let theme: Themes = 'material'
 
   let ref: HTMLDivElement;
+  let initialLoading: boolean = true;
 
   onMount(() => {
     function* generateSetData () {
       const initialData = []
 
-      for (let i = 0; i < 4; i++) {
+      for (let i = 0; i < 3; i++) {
         const item = yield;
         initialData.push(item)
       }
 
-      const chart = initChart(ref, initialData)
+      initialLoading = true;
+
+      const item = yield;
+      initialData.push(item)
+
+      const chart = initChart(ref, initialData, theme)
       
       while (true) {
         const item = yield;
@@ -32,17 +39,20 @@
     const gen = generateSetData();
     gen.next();
 
-    emitter.on('add', el => {
-      gen.next({ value: el, date: new Date() })
+    const socket = new WebSocket(`ws://${ws}/connect/${metric}`);
+
+    socket.addEventListener('open', (event) => {
+      console.log('OPEN SOCKET!', metric);
     });
 
-    setTimeout(() => {
-      dispatch('createemmiter', emitter)
-    }, 0);
+    socket.addEventListener('message', (event) => {
+      gen.next({ value: event.data, date: new Date() })
+    });
   })
 </script>
 
 <div>
+  <h2>Метрика: {title}</h2>
   <div class="chart" bind:this={ref}></div>
 </div>
 

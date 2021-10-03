@@ -11,5 +11,8 @@
     "build_and_start": "npm run front:dev && npm run back"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "systeminformation": "^5.9.4"
+  }
 }

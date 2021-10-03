@@ -1,10 +1,21 @@
 import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
+
+import am4themes_material from "@amcharts/amcharts4/themes/material";
+import am4themes_dataviz from "@amcharts/amcharts4/themes/dataviz";
 import am4themes_animated from "@amcharts/amcharts4/themes/animated";
 
-am4core.useTheme(am4themes_animated);
+export type Themes = 'material' | 'dataviz'
 
-const initChart = (element: HTMLDivElement, initialData = []) => {
+const initChart = (element: HTMLDivElement, initialData = [], theme: Themes = 'material') => {
+  am4core.unuseAllThemes();
+  am4core.useTheme(am4themes_animated);
+
+  if (theme === 'material') {
+    am4core.useTheme(am4themes_material);
+  } else if (theme === 'dataviz') {
+    am4core.useTheme(am4themes_dataviz);
+  }
 
   let chart = am4core.create(element, am4charts.XYChart);
   chart.hiddenState.properties.opacity = 0;

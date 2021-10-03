@@ -4,7 +4,11 @@ import FastifyWebSocket from 'fastify-websocket'
 
 import path from 'path'
 
-import metricsSend from './metrics'
+import {
+  metricsSendRandom,
+  metricsSendCPUTemperature,
+  metricsSendGPUTemperature,
+} from './metrics'
 
 const server: FastifyInstance = Fastify({logger: true })
 
@@ -17,8 +21,18 @@ server.get('/', (req, repl) => {
   repl.sendFile('index.html')
 })
 
-server.get('/connect', { websocket: true }, (connection, req) => {
-  metricsSend(connection)
+server.get<{
+  Params: { id: 'random' }
+}>('/connect/:id', { websocket: true }, (connection, req) => {
+  const { id } = req.params;
+
+  const metricAction = {
+    'random': metricsSendRandom,
+    'cpu_temperature': metricsSendCPUTemperature,
+    'gpu_temperature': metricsSendGPUTemperature,
+  }
+
+  metricAction[id] && metricAction[id](connection)
 })
 
 const start = async () => {
