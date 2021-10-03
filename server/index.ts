@@ -2,7 +2,9 @@ import Fastify, { FastifyInstance } from 'fastify'
 import FastifyStatic from 'fastify-static'
 import FastifyWebSocket from 'fastify-websocket'
 
-import path from 'path';
+import path from 'path'
+
+import metricsSend from './metrics'
 
 const server: FastifyInstance = Fastify({logger: true })
 
@@ -16,7 +18,7 @@ server.get('/', (req, repl) => {
 })
 
 server.get('/connect', { websocket: true }, (connection, req) => {
-  connection.socket.send('hi from server')
+  metricsSend(connection)
 })
 
 const start = async () => {

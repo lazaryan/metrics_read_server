@@ -3,10 +3,10 @@
 <script lang="ts">
   import { onMount } from 'svelte';
 
-  export let ws = import.meta.env.FRONT_WS_SERVER;
+  export let ws = import.meta.env.FRONT_WS_SERVER || window.location.host;
 
   onMount(() => {
-    const socket = new WebSocket(ws);
+    const socket = new WebSocket(`ws://${ws}/connect`);
 
     socket.addEventListener('open', function (event) {
       console.log('OPEN SOCKET!');
