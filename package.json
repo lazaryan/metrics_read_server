@@ -1,0 +1,15 @@
+{
+  "name": "metrics_stream",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "back": "cd ./server && npm start",
+    "front": "cd ./front && npm run build",
+    "front:dev": "cd ./front && npm run dev",
+    "build_and_start": "npm run front:dev && npm run back"
+  },
+  "author": "",
+  "license": "ISC"
+}
