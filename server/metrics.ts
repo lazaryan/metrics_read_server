@@ -1,7 +1,10 @@
 import type { SocketStream } from 'fastify-websocket'
 
 const getData = async () => {
-  return await Math.random() * 100
+  const max = 100;
+  const min = -100;
+  
+  return await Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 export const metricsSend = (connection: SocketStream) => {
