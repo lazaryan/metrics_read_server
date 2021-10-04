@@ -11,13 +11,17 @@
       <sl-widget-metrics-chart
         title="Рандомные числа"
         metric="random"
+        theme="dataviz"
+        maxdot="50"
+        ws={import.meta.env.FRONT_WS_SERVER || window.location.host}
       ></sl-widget-metrics-chart>
     </div>
     <div class="metric">
       <sl-widget-metrics-chart
         title="Температура GPU сервера"
         metric="gpu_temperature"
-        theme="dataviz"
+        ws={import.meta.env.FRONT_WS_SERVER || window.location.host}
+        maxdot="50"
       ></sl-widget-metrics-chart>
     </div>
   </div>
@@ -31,7 +35,6 @@
 
   .columns-metrics {
     display: flex;
-    height: 250px;
     justify-content: space-between;
   }
 

@@ -6,26 +6,31 @@
   import initChart from './utils/initChart'
   import type { Themes } from './utils/initChart'
 
-  export let ws = import.meta.env.FRONT_WS_SERVER || window.location.host
+  export let ws = location.host
   export let title = 'Неизвестная'
   export let metric = 'random'
   export let theme: Themes = 'material'
+  export let maxdot = 100
 
   let ref: HTMLDivElement;
   let initialLoading: boolean = true;
 
   onMount(() => {
     function* generateSetData () {
-      const initialData = []
+      const maxViewDot = (count => count < 10 ? 10 : count)(+maxdot);
+      const initialData = [];
+      let addedDots = 0;
 
       for (let i = 0; i < 3; i++) {
         const item = yield;
+        addedDots++;
         initialData.push(item)
       }
 
       initialLoading = true;
 
       const item = yield;
+      addedDots++
       initialData.push(item)
 
       const chart = initChart(ref, initialData, theme)
@@ -33,6 +38,12 @@
       while (true) {
         const item = yield;
         chart.addData(item)
+
+        if (addedDots > maxViewDot) {
+          chart.removeData(1)
+        } else {
+          addedDots++
+        }
       }
     }
 
@@ -58,6 +69,7 @@
 
 <style>
   .chart {
-    height: 500px;
+    min-height: 350px;
+    height: 100%;
   }
 </style>
