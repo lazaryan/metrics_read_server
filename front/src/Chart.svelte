@@ -6,6 +6,8 @@
   import initChart from './utils/initChart'
   import type { Themes } from './utils/initChart'
 
+  import IconLoader from './assets/loader.svg';
+
   export let ws = location.host
   export let title = 'Неизвестная'
   export let metric = 'random'
@@ -16,6 +18,7 @@
   let initialLoading: boolean = true;
 
   onMount(() => {
+    console.log(IconLoader)
     function* generateSetData () {
       const maxViewDot = (count => count < 10 ? 10 : count)(+maxdot);
       const initialData = [];
@@ -27,7 +30,7 @@
         initialData.push(item)
       }
 
-      initialLoading = true;
+      initialLoading = false;
 
       const item = yield;
       addedDots++
@@ -62,12 +65,39 @@
   })
 </script>
 
-<div>
-  <h2>Метрика: {title}</h2>
-  <div class="chart" bind:this={ref}></div>
+<div class="wrapper">
+  <h2 class="title">Метрика: {title}</h2>
+  {#if initialLoading}
+    <div class="loader">
+      <img src={IconLoader} alt="loader" />
+    </div>
+  {:else}
+    <div class="chart" bind:this={ref}></div>
+  {/if}
 </div>
 
 <style>
+  .wrapper {
+    border: 5px solid rgb(26, 77, 187);
+    background: ghostwhite;
+    border-radius: 30px;
+    padding: 10px;
+    box-sizing: border-box;
+  }
+
+  .title {
+    text-align: center;
+    border-bottom: 2px solid #222;
+  }
+
+  .loader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    min-height: 250px;
+  }
+
   .chart {
     min-height: 350px;
     height: 100%;
