@@ -3,9 +3,10 @@ import * as am4charts from "@amcharts/amcharts4/charts";
 
 import am4themes_material from "@amcharts/amcharts4/themes/material";
 import am4themes_dataviz from "@amcharts/amcharts4/themes/dataviz";
+import am4themes_kelly from "@amcharts/amcharts4/themes/kelly";
 import am4themes_animated from "@amcharts/amcharts4/themes/animated";
 
-export type Themes = 'material' | 'dataviz'
+export type Themes = 'material' | 'dataviz' | 'kelly'
 
 const initChart = (element: HTMLDivElement, initialData = [], theme: Themes = 'material') => {
   am4core.unuseAllThemes();
@@ -15,6 +16,8 @@ const initChart = (element: HTMLDivElement, initialData = [], theme: Themes = 'm
     am4core.useTheme(am4themes_material);
   } else if (theme === 'dataviz') {
     am4core.useTheme(am4themes_dataviz);
+  } else if (theme === 'kelly') {
+    am4core.useTheme(am4themes_kelly);
   }
 
   let chart = am4core.create(element, am4charts.XYChart);
