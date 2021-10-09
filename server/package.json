@@ -13,7 +13,8 @@
   "dependencies": {
     "fastify": "^3.22.0",
     "fastify-static": "^4.2.3",
-    "fastify-websocket": "^4.0.0"
+    "fastify-websocket": "^4.0.0",
+    "systeminformation": "^5.9.7"
   },
   "devDependencies": {
     "@types/node": "^16.10.2",
