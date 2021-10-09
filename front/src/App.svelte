@@ -25,6 +25,18 @@
       ></sl-widget-metrics-chart>
     </div>
   </div>
+  <div class="columns-metrics">
+    <div class="metric">
+      <sl-widget-metrics-chart
+        title="Рандомные числа (с изменением задержки)"
+        metric="random"
+        theme="dataviz"
+        maxdot="50"
+        duration="5"
+        ws={import.meta.env.FRONT_WS_SERVER || window.location.host}
+      ></sl-widget-metrics-chart>
+    </div>
+  </div>
 </main>
 
 <style>
@@ -36,10 +48,11 @@
   .columns-metrics {
     display: flex;
     justify-content: space-between;
+    margin-bottom: 20px;
   }
 
   .columns-metrics .metric {
-    width: 45%;
+    width: 49%;
     height: 100%;
   }
 </style>
