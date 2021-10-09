@@ -5,6 +5,7 @@
 
   import initChart from './utils/initChart'
   import type { Themes } from './utils/initChart'
+  import type { XYChart } from '@amcharts/amcharts4/charts'
 
   import IconLoader from './assets/loader.svg';
 
@@ -13,18 +14,18 @@
   export let metric = 'random'
   export let theme: Themes = 'material'
   export let maxdot = 100
+  export let duration: number | null = 0
 
   let ref: HTMLDivElement;
   let initialLoading: boolean = true;
 
   onMount(() => {
-    console.log(IconLoader)
-    function* generateSetData () {
+    async function* generateSetData () {
       const maxViewDot = (count => count < 10 ? 10 : count)(+maxdot);
       const initialData = [];
       let addedDots = 0;
 
-      for (let i = 0; i < 3; i++) {
+      for (let i = 0; i < 2; i++) {
         const item = yield;
         addedDots++;
         initialData.push(item)
@@ -32,11 +33,9 @@
 
       initialLoading = false;
 
-      const item = yield;
-      addedDots++
-      initialData.push(item)
-
-      const chart = initChart(ref, initialData, theme)
+      const chart: XYChart = await new Promise((resolve) => {
+        setTimeout(() => resolve(initChart(ref, initialData, theme)), 100)
+      })
       
       while (true) {
         const item = yield;
@@ -53,7 +52,7 @@
     const gen = generateSetData();
     gen.next();
 
-    const socket = new WebSocket(`ws://${ws}/connect/${metric}`);
+    const socket = new WebSocket(`ws://${ws}/connect/${metric}${duration ? `/${duration}` : ''}`);
 
     socket.addEventListener('open', (event) => {
       console.log('OPEN SOCKET!', metric);
