@@ -9,7 +9,6 @@
 
   import IconLoader from './assets/loader.svg';
 
-  export let ws = location.host
   export let title = 'Неизвестная'
   export let metric = 'random'
   export let theme: Themes = 'material'
@@ -52,7 +51,7 @@
     const gen = generateSetData();
     gen.next();
 
-    const socket = new WebSocket(`ws://${ws}/connect/${metric}${duration ? `/${duration}` : ''}`);
+    const socket = new WebSocket(`ws://${window.location.host}/ws/connect/${metric}${duration ? `/${duration}` : ''}`);
 
     socket.addEventListener('open', (event) => {
       console.log('OPEN SOCKET!', metric);

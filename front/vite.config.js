@@ -4,5 +4,15 @@ import { svelte } from '@sveltejs/vite-plugin-svelte'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [svelte()],
-  envPrefix: 'FRONT_'
+  server: {
+    cors: false,
+    proxy: {
+      '/ws': {
+        target: 'ws://localhost:3000',
+        changeOrigin: true,
+        ws: true,
+        rewrite: path => path.replace(/^\/ws/, '')
+      }
+    }
+  }
 })

@@ -8,7 +8,8 @@
     "back": "cd ./server && npm start",
     "front": "cd ./front && npm run build",
     "front:dev": "cd ./front && npm run dev",
-    "build_and_start": "npm run front:dev && npm run back"
+    "build_and_start": "npm run front:dev && npm run back",
+    "install_all": "cd ./front && npm i && cd ../server && npm i"
   },
   "author": "",
   "license": "ISC"
