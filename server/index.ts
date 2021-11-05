@@ -1,6 +1,7 @@
 import Fastify, { FastifyInstance } from 'fastify'
 import FastifyStatic from 'fastify-static'
 import FastifyWebSocket from 'fastify-websocket'
+import FastifyCors from 'fastify-cors';
 
 import path from 'path'
 
@@ -12,12 +13,16 @@ import {
 
 import type { Common, Metrics } from './types'
 
-const server: FastifyInstance = Fastify({logger: true })
+const server: FastifyInstance = Fastify({ logger: true })
 
 server.register(FastifyStatic, {
   root: path.join(__dirname, '../front/dist/')
 })
 server.register(FastifyWebSocket)
+server.register(FastifyCors, {
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT']
+})
 
 server.get('/', (req, repl) => {
   repl.sendFile('index.html')

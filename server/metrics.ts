@@ -34,12 +34,25 @@ export const metricsSendCPUTemperature: Metrics.Action = (connection, duration =
   })
 }
 
-export const metricsSendGPUTemperature: Metrics.Action = (connection, duration = defaultDuration) => {
+export const metricsSendGPUTemperature: Metrics.Action = async (connection, duration = defaultDuration) => {
   const execAsync = promisify(exec);
 
+  let isNvidiaGPU = true;
+
+  try {
+    const _result = await execAsync('nvidia-smi --query-gpu=temperature.gpu --format=csv,noheader');
+  } catch (_) {
+    isNvidiaGPU = false;
+  }
+
   const intervalObj = setInterval(async () => {
-    const result = await execAsync('nvidia-smi --query-gpu=temperature.gpu --format=csv,noheader');
-    connection.socket.send(+result.stdout || 0)
+    //TODO: get check gpu
+    if (isNvidiaGPU) {
+      const result = await execAsync('nvidia-smi --query-gpu=temperature.gpu --format=csv,noheader');
+      connection.socket.send(+result.stdout || 0)
+    } else {
+      connection.socket.send(0)
+    }
   }, duration)
 
   connection.socket.on('close', () => {
