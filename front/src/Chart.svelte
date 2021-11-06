@@ -17,6 +17,7 @@
 
   let ref: HTMLDivElement;
   let initialLoading: boolean = true;
+  let errorConnect: boolean = false;
 
   onMount(() => {
     async function* generateSetData () {
@@ -60,6 +61,16 @@
     socket.addEventListener('message', (event) => {
       gen.next({ value: event.data, date: new Date() })
     });
+
+    socket.addEventListener('close', (error) => {
+      initialLoading = false;
+      errorConnect = true;
+    })
+
+    socket.addEventListener('error', (error) => {
+      initialLoading = false;
+      errorConnect = true;
+    })
   })
 </script>
 
@@ -72,6 +83,11 @@
   {:else}
     <div class="chart" bind:this={ref}></div>
   {/if}
+  {#if errorConnect}
+    <div class="error-block">
+      <p><span class="big-text">OOOOPS!!!</span> Произошла ошибка в считывание метрики</p>
+    </div>
+  {/if}
 </div>
 
 <style>
@@ -81,6 +97,7 @@
     border-radius: 30px;
     padding: 10px;
     box-sizing: border-box;
+    position: relative;
   }
 
   .title {
@@ -93,7 +110,32 @@
     justify-content: center;
     align-items: center;
     height: 100%;
-    min-height: 250px;
+    min-height: 350px;
+  }
+
+  .error-block {
+    height: 340px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #e0b4b491;
+    box-shadow: 0 0 0 1px #e0b4b4 inset, 0 0 0 0 transparent;
+    border-radius: 20px;
+    margin: 10px;
+    position: absolute;
+    top: 70px;
+    width: calc(100% - 40px);
+  }
+
+  .error-block .big-text {
+    color: #912d2b;
+    font-size: 24px;
+    font-weight: bold;
+  }
+
+  .error-block p {
+    color: #9f3a38;
+    font-size: 20px;
   }
 
   .chart {
