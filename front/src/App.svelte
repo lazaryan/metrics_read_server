@@ -5,7 +5,7 @@
 </script>
 
 <main>
-  <h1>Metricsssss!!!</h1>
+  <h1>Проект для считывания метрик</h1>
   <div class="columns-metrics">
     <div class="metric">
       <sl-widget-metrics-chart

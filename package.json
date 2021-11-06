@@ -6,9 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "back": "cd ./server && npm start",
-    "front": "cd ./front && npm run build",
-    "front:dev": "cd ./front && npm run dev",
-    "build_and_start": "npm run front:dev && npm run back",
+    "front": "cd ./front && npm run dev -- --host",
+    "front:build": "cd ./front && npm run build",
     "install_all": "cd ./front && npm i && cd ../server && npm i"
   },
   "author": "",

@@ -19,10 +19,7 @@ server.register(FastifyStatic, {
   root: path.join(__dirname, '../front/dist/')
 })
 server.register(FastifyWebSocket)
-server.register(FastifyCors, {
-  origin: '*',
-  methods: ['GET', 'POST', 'PUT']
-})
+server.register(FastifyCors)
 
 server.get('/', (req, repl) => {
   repl.sendFile('index.html')
