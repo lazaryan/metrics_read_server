@@ -5,12 +5,49 @@
     <link rel="icon" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Metrics project</title>
+    <link rel="stylesheet" href="./src/assets/main.css">
     <style>
     </style>
   </head>
   <body>
-    <!--<div id="app"></div>-->
-    <sl-widget-metrics></sl-widget-metrics>
+    <h1>Проект для считывания метрик</h1>
+    
+    <div class="columns-metrics">
+      <div class="metric">
+        <sl-widget-metrics-chart
+          title="Рандомные числа"
+          metric="random"
+          theme="dataviz"
+          maxdot="50"
+        ></sl-widget-metrics-chart>
+      </div>
+      <div class="metric">
+        <sl-widget-metrics-chart
+          title="Температура CPU сервера"
+          metric="cpu_temperature"
+          maxdot="100"
+        ></sl-widget-metrics-chart>
+      </div>
+    </div>
+    <div class="columns-metrics">
+      <div class="metric">
+        <sl-widget-metrics-chart
+          title="Температура GPU сервера"
+          metric="gpu_temperature"
+          maxdot="100"
+        ></sl-widget-metrics-chart>
+      </div>
+      <div class="metric">
+        <sl-widget-metrics-chart
+          title="Рандомные числа (с изменением задержки)"
+          metric="random"
+          theme="dataviz"
+          maxdot="50"
+          duration="5"
+        ></sl-widget-metrics-chart>
+      </div>
+    </div>
+
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

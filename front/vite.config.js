@@ -6,6 +6,7 @@ export default defineConfig({
   plugins: [svelte()],
   server: {
     cors: false,
+    port: 3001,
     proxy: {
       '/ws': {
         target: 'ws://localhost:3000',
