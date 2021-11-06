@@ -23,7 +23,15 @@ export const metricsSendRandom: Metrics.Action = (connection, duration = default
   })
 }
 
-export const metricsSendCPUTemperature: Metrics.Action = (connection, duration = defaultDuration) => {
+export const metricsSendCPUTemperature: Metrics.Action = async (connection, duration = defaultDuration) => {
+
+  const testTemparature = await si.cpuTemperature();
+
+  if (!testTemparature.main) {
+    connection.destroy();
+    return;
+  }
+
   const intervalObj = setInterval(async () => {
     const temperature = await si.cpuTemperature();
     connection.socket.send(temperature.main || 0)
@@ -36,23 +44,18 @@ export const metricsSendCPUTemperature: Metrics.Action = (connection, duration =
 
 export const metricsSendGPUTemperature: Metrics.Action = async (connection, duration = defaultDuration) => {
   const execAsync = promisify(exec);
-
-  let isNvidiaGPU = true;
+  const command = 'nvidia-smi --query-gpu=temperature.gpu --format=csv,noheader';
 
   try {
-    const _result = await execAsync('nvidia-smi --query-gpu=temperature.gpu --format=csv,noheader');
+    const _result = await execAsync(command);
   } catch (_) {
-    isNvidiaGPU = false;
+    connection.destroy();
+    return;
   }
 
   const intervalObj = setInterval(async () => {
-    //TODO: get check gpu
-    if (isNvidiaGPU) {
-      const result = await execAsync('nvidia-smi --query-gpu=temperature.gpu --format=csv,noheader');
-      connection.socket.send(+result.stdout || 0)
-    } else {
-      connection.socket.send(0)
-    }
+    const result = await execAsync(command);
+    connection.socket.send(+result.stdout || 0)
   }, duration)
 
   connection.socket.on('close', () => {

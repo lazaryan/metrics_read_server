@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "back": "cd ./server && npm start",
-    "front": "cd ./front && npm run dev -- --host",
+    "front": "cd ./front && npm run dev",
     "front:build": "cd ./front && npm run build",
     "install_all": "cd ./front && npm i && cd ../server && npm i"
   },

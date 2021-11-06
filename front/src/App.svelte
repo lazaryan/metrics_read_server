@@ -19,11 +19,18 @@
       <sl-widget-metrics-chart
         title="Температура CPU сервера"
         metric="cpu_temperature"
-        maxdot="50"
+        maxdot="100"
       ></sl-widget-metrics-chart>
     </div>
   </div>
   <div class="columns-metrics">
+    <div class="metric">
+      <sl-widget-metrics-chart
+        title="Температура GPU сервера"
+        metric="gpu_temperature"
+        maxdot="100"
+      ></sl-widget-metrics-chart>
+    </div>
     <div class="metric">
       <sl-widget-metrics-chart
         title="Рандомные числа (с изменением задержки)"
