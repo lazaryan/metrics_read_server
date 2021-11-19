@@ -13,6 +13,12 @@ import {
 
 import type { Common, Metrics } from './types'
 
+const mongo = require('mongodb').MongoClient
+const url = 'mongodb://localhost:27017'
+const client = new mongo(url)
+let db
+let collection = {};
+
 const server: FastifyInstance = Fastify({ logger: true })
 
 server.register(FastifyStatic, {
@@ -37,6 +43,14 @@ server.get<{
   const { id } = req.params;
 
   metricAction[id] && metricAction[id](connection)
+
+  //@ts-ignore
+  collection.insertOne({
+    id: req.id,
+    params: req.params,
+    user_agent: req.headers['user-agent'],
+    url: req.url
+  })
 })
 
 server.get<{
@@ -47,11 +61,23 @@ server.get<{
   const actionDuration = (duration => duration < 1 ? 1 : duration > 20 ? 20 : duration)(Number(duration) || 0) * 1000
 
   metricAction[id] && metricAction[id](connection, actionDuration)
+
+    //@ts-ignore
+    collection.insertOne({
+      id: req.id,
+      params: req.params,
+      user_agent: req.headers['user-agent'],
+      url: req.url
+    })
 })
 
 const start = async () => {
   try {
     await server.listen(3000)
+    await client.connect()
+    console.log('Connected successfully to server')
+    db = client.db("MetriClients")
+    collection = db.collection('documents')
   } catch (err) {
     server.log.error(err)
     process.exit(1)
